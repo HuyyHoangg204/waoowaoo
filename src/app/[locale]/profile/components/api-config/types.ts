@@ -104,6 +104,9 @@ export const PRESET_MODELS: PresetModel[] = [
     { modelId: 'imagen-4.0-generate-001', name: 'Imagen 4', type: 'image', provider: 'google' },
     { modelId: 'imagen-4.0-ultra-generate-001', name: 'Imagen 4 Ultra', type: 'image', provider: 'google' },
     { modelId: 'imagen-4.0-fast-generate-001', name: 'Imagen 4 Fast', type: 'image', provider: 'google' },
+    // VietAuto image models
+    { modelId: 'NARWHAL', name: 'Narwhal', type: 'image', provider: 'vietauto' },
+    { modelId: 'GEM_PIX_2', name: 'Gem Pix 2', type: 'image', provider: 'vietauto' },
     // 视频模型
     { modelId: 'doubao-seedance-1-0-pro-fast-251015', name: 'Seedance 1.0 Pro Fast', type: 'video', provider: 'ark' },
     { modelId: 'doubao-seedance-1-0-lite-i2v-250428', name: 'Seedance 1.0 Lite', type: 'video', provider: 'ark' },
@@ -167,6 +170,7 @@ export const PRESET_PROVIDERS: Omit<Provider, 'apiKey' | 'hasApiKey'>[] = [
     { id: 'vidu', name: 'Vidu' },
     { id: 'fal', name: 'FAL' },
     { id: 'qwen', name: 'Qwen' },
+    { id: 'vietauto', name: 'VietAuto' },
 ]
 
 const ZH_PROVIDER_NAME_MAP: Record<string, string> = {

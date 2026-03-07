@@ -2,9 +2,10 @@ import sharp from 'sharp'
 import type { Job } from 'bullmq'
 import { prisma } from '@/lib/prisma'
 import { generateImage } from '@/lib/generator-api'
+import { generateBatchImages } from '@/lib/generators/vietauto'
 import { queryFalStatus } from '@/lib/async-submit'
 import { fetchWithTimeoutAndRetry } from '@/lib/ark-api'
-import { getProviderConfig } from '@/lib/api-config'
+import { getProviderConfig, getProviderKey } from '@/lib/api-config'
 import { executeAiVisionStep } from '@/lib/ai-runtime'
 import { getUserModelConfig } from '@/lib/config-service'
 import {
@@ -202,7 +203,16 @@ export async function handleReferenceToCharacterTask(job: Job<TaskJobData>) {
   }
 
   const useReferenceImages = !customDescription
-  const { apiKey: falApiKey } = await getProviderConfig(job.data.userId, 'fal')
+  const isVietAuto = imageModel.startsWith('vietauto::')
+  let falApiKey: string | null = null
+  if (!isVietAuto) {
+    try {
+      const { apiKey } = await getProviderConfig(job.data.userId, 'fal')
+      falApiKey = apiKey
+    } catch {
+      // FAL not configured — fine if using a non-FAL image model
+    }
+  }
   const keyPrefix = isAssetHub ? 'ref-char' : `proj-ref-char-${job.data.projectId}`
 
   await reportTaskProgress(job, 35, {
@@ -211,35 +221,100 @@ export async function handleReferenceToCharacterTask(job: Job<TaskJobData>) {
     displayMode: 'detail',
   })
 
-  const imageResults = await Promise.all([0, 1, 2].map(async (index) =>
-    await generateLabeledImage({
-      job,
-      imageIndex: index,
-      userId: job.data.userId,
-      imageModel,
+  let imageResults: (string | null)[]
+
+  if (isVietAuto) {
+    // VietAuto batch: send 3 prompts in 1 API call
+    const modelId = imageModel.split('::')[1] || 'NARWHAL'
+    const batchItems = [0, 1, 2].map(() => ({
       prompt,
       referenceImages: useReferenceImages ? allReferenceImages : undefined,
-      falApiKey,
-      keyPrefix,
-      labelText: characterName,
-    }),
-  ))
+    }))
+
+    const batchResults = await generateBatchImages(
+      job.data.userId,
+      batchItems,
+      { model: modelId, aspectRatio: CHARACTER_IMAGE_BANANA_RATIO },
+    )
+
+    // Process each batch result: add label, upload to COS
+    imageResults = await Promise.all(batchResults.map(async (result, index) => {
+      if (!result.success || !result.imageUrl) return null
+      try {
+        await assertTaskActive(job, `reference_to_character_process_${index + 1}`)
+
+        // Download the image (result.imageUrl is a data: URL)
+        let buffer: Buffer
+        if (result.imageUrl.startsWith('data:')) {
+          const base64Start = result.imageUrl.indexOf(';base64,')
+          if (base64Start === -1) return null
+          buffer = Buffer.from(result.imageUrl.substring(base64Start + 8), 'base64')
+        } else {
+          const imgRes = await fetchWithTimeoutAndRetry(result.imageUrl, {
+            logPrefix: `[ref-char-batch:${index + 1}]`,
+          })
+          buffer = Buffer.from(await imgRes.arrayBuffer())
+        }
+
+        const meta = await sharp(buffer).metadata()
+        const width = meta.width || 2160
+        const height = meta.height || 2160
+        const fontSize = Math.floor(height * 0.04)
+        const pad = Math.floor(fontSize * 0.5)
+        const barHeight = fontSize + pad * 2
+
+        const svg = await createLabelSVG(width, barHeight, fontSize, pad, characterName)
+        const processed = await sharp(buffer)
+          .extend({
+            top: barHeight, bottom: 0, left: 0, right: 0,
+            background: { r: 0, g: 0, b: 0, alpha: 1 },
+          })
+          .composite([{ input: svg, top: 0, left: 0 }])
+          .jpeg({ quality: 90, mozjpeg: true })
+          .toBuffer()
+
+        const key = generateUniqueKey(`${keyPrefix}-${Date.now()}-${index}`, 'jpg')
+        return await uploadToCOS(processed, key)
+      } catch {
+        return null
+      }
+    }))
+  } else {
+    // Non-VietAuto: 3 individual calls (existing logic)
+    imageResults = await Promise.all([0, 1, 2].map(async (index) =>
+      await generateLabeledImage({
+        job,
+        imageIndex: index,
+        userId: job.data.userId,
+        imageModel,
+        prompt,
+        referenceImages: useReferenceImages ? allReferenceImages : undefined,
+        falApiKey,
+        keyPrefix,
+        labelText: characterName,
+      }),
+    ))
+  }
 
   let description: string | null = null
   if (analysisModel) {
-    const analysisPrompt = buildPrompt({
-      promptId: PROMPT_IDS.CHARACTER_IMAGE_TO_DESCRIPTION,
-      locale: job.data.locale,
-    })
-    const completion = await executeAiVisionStep({
-      userId: job.data.userId,
-      model: analysisModel,
-      prompt: analysisPrompt,
-      imageUrls: allReferenceImages,
-      temperature: 0.3,
-      ...(isProject ? { projectId: job.data.projectId } : {}),
-    })
-    description = completion.text
+    try {
+      const analysisPrompt = buildPrompt({
+        promptId: PROMPT_IDS.CHARACTER_IMAGE_TO_DESCRIPTION,
+        locale: job.data.locale,
+      })
+      const completion = await executeAiVisionStep({
+        userId: job.data.userId,
+        model: analysisModel,
+        prompt: analysisPrompt,
+        imageUrls: allReferenceImages,
+        temperature: 0.3,
+        ...(isProject ? { projectId: job.data.projectId } : {}),
+      })
+      description = completion.text
+    } catch {
+      // Vision analysis failed — continue without description
+    }
   }
 
   const successfulCosKeys = imageResults.filter((item): item is string => Boolean(item))

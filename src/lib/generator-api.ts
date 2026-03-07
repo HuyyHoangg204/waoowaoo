@@ -29,15 +29,14 @@ export async function generateImage(
         aspectRatio?: string
         resolution?: string
         outputFormat?: string
-        keepOriginalAspectRatio?: boolean  // 🔥 编辑时保持原图比例
-        size?: string  // 🔥 直接指定像素尺寸如 "5016x3344"（优先于 aspectRatio）
+        keepOriginalAspectRatio?: boolean
+        size?: string
     }
 ): Promise<GenerateResult> {
     const selection = await resolveModelSelection(userId, modelKey, 'image')
     const generator = createImageGenerator(selection.provider, selection.modelId)
     _ulogInfo(`[generateImage] resolved model selection: ${selection.modelKey}`)
 
-    // 调用生成（提取 referenceImages 单独传递，其余选项合并进 options）
     const { referenceImages, ...generatorOptions } = options || {}
     return generator.generate({
         userId,

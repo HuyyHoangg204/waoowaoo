@@ -161,10 +161,13 @@ export async function submitTask(params: {
 
   let preparedBillingInfo = (task.billingInfo || resolvedBillingInfo || null) as TaskBillingInfo | null
   if (!deduped && isBillableTaskType(params.type) && (!computedBillingInfo || !computedBillingInfo.billable)) {
-    await markTaskFailed(task.id, 'INVALID_PARAMS', `missing server-generated billingInfo for billable task type: ${params.type}`)
-    throw new ApiError('INVALID_PARAMS', {
-      message: `missing server-generated billingInfo for billable task type: ${params.type}`,
+    // If billing info can't be computed (e.g., model not in payload), allow task to proceed without billing
+    logger.warn({
+      action: 'task.submit.billing_skipped',
+      message: `No billing info computed for billable task type: ${params.type}, proceeding without billing`,
+      details: { type: params.type },
     })
+    preparedBillingInfo = null
   }
 
   if (!deduped && preparedBillingInfo) {

@@ -21,6 +21,7 @@ import { OpenAICompatibleVideoGenerator } from './video'
 import { QwenTTSGenerator } from './audio'
 import { MinimaxVideoGenerator } from './minimax'
 import { ViduVideoGenerator } from './vidu'
+import { VietAutoImageGenerator } from './vietauto'
 import { getProviderKey } from '@/lib/api-config'
 
 /**
@@ -56,6 +57,8 @@ export function createImageGenerator(provider: string, modelId?: string): ImageG
             return new GeminiCompatibleImageGenerator(actualModelId, provider)
         case 'openai-compatible':
             return new OpenAICompatibleImageGenerator(actualModelId, provider)
+        case 'vietauto':
+            return new VietAutoImageGenerator(actualModelId)
         default:
             throw new Error(`Unknown image generator provider: ${provider}`)
     }
