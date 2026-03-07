@@ -218,6 +218,7 @@ model NovelPromotionPanel {
   sketchImageMedia  MediaObject?              @relation("NovelPromotionPanelSketchMedia", fields: [sketchImageMediaId], references: [id], onDelete: SetNull)
   photographyRules  String?
   actingNotes       String? // 演技指导数据 JSON
+  multiAngleImages  String? // JSON array of multi-angle generated images
   previousImageUrl  String?
   previousImageMediaId String?
   previousImageMedia MediaObject?             @relation("NovelPromotionPanelPreviousImageMedia", fields: [previousImageMediaId], references: [id], onDelete: SetNull)

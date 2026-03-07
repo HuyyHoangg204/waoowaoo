@@ -21,7 +21,7 @@ import { OpenAICompatibleVideoGenerator } from './video'
 import { QwenTTSGenerator } from './audio'
 import { MinimaxVideoGenerator } from './minimax'
 import { ViduVideoGenerator } from './vidu'
-import { VietAutoImageGenerator } from './vietauto'
+import { VietAutoImageGenerator, VietAutoVideoGenerator } from './vietauto'
 import { getProviderKey } from '@/lib/api-config'
 
 /**
@@ -84,6 +84,8 @@ export function createVideoGenerator(provider: string): VideoGenerator {
             return new ViduVideoGenerator()
         case 'openai-compatible':
             return new OpenAICompatibleVideoGenerator(provider)
+        case 'vietauto':
+            return new VietAutoVideoGenerator()
         default:
             throw new Error(`Unknown video generator provider: ${provider}`)
     }

@@ -1,16 +1,16 @@
 /**
- * VietAuto Image Generator
+ * VietAuto Image & Video Generator
  *
- * Integrates with the VietAuto.ai API for image generation.
+ * Integrates with the VietAuto.ai API for image and video generation.
  * Supports:
- *   - NARWHAL model (primary)
- *   - GEM_PIX_2 model (fallback)
+ *   - Image: NARWHAL model (primary), GEM_PIX_2 model (fallback)
+ *   - Video: VEO_3.1_FAST, VEO_3.1_FAST_LOWER_PRIORITY (image-to-video)
  *   - Reference image upload
  *   - Async polling (POST → get video_id → poll GET until SUCCESS)
  */
 
 import { createScopedLogger } from '@/lib/logging/core'
-import { BaseImageGenerator, ImageGenerateParams, GenerateResult } from './base'
+import { BaseImageGenerator, ImageGenerateParams, GenerateResult, BaseVideoGenerator, VideoGenerateParams } from './base'
 import { getImageBase64Cached } from '@/lib/image-cache'
 import { getProviderConfig } from '@/lib/api-config'
 
@@ -266,6 +266,145 @@ export class VietAutoImageGenerator extends BaseImageGenerator {
                 error: `Download error: ${e instanceof Error ? e.message : String(e)}`,
             }
         }
+    }
+}
+
+// ============================================================
+// VietAuto Video Generator (Image-to-Video)
+// ============================================================
+
+export class VietAutoVideoGenerator extends BaseVideoGenerator {
+    private model: string
+
+    constructor(model: string = 'VEO_3.1_FAST') {
+        super()
+        this.model = model
+    }
+
+    protected async doGenerate(params: VideoGenerateParams): Promise<GenerateResult> {
+        const { userId, imageUrl, prompt = '', options = {} } = params
+
+        const providerConfig = await getProviderConfig(userId, 'vietauto')
+        const apiKey = providerConfig.apiKey
+
+        const projectId = process.env.VIETAUTO_PROJECT_ID
+        if (!projectId) {
+            return { success: false, error: 'VIETAUTO_PROJECT_ID not configured in .env' }
+        }
+
+        const { aspectRatio, modelId } = options as { aspectRatio?: string; modelId?: string }
+        const screenRatio = mapAspectRatio(aspectRatio)
+        const videoModel = modelId || this.model
+
+        logger.info(`Creating video: model=${videoModel}, ratio=${screenRatio}`)
+
+        try {
+            // 1. Build FormData for image-to-video
+            const formData = new FormData()
+            formData.append('action_type', 'IMAGE_TO_VIDEO')
+            formData.append('name', `video_${Date.now()}`)
+            formData.append('model', videoModel)
+            formData.append('screen_ratio', screenRatio)
+            formData.append('project_id', projectId)
+            formData.append('prompts', JSON.stringify([prompt]))
+
+            // 2. Download source image and attach as file
+            const downloaded = await downloadImageAsBuffer(imageUrl)
+            if (!downloaded) {
+                return { success: false, error: 'Failed to download source image for video generation' }
+            }
+            const blob = new Blob([new Uint8Array(downloaded.buffer)], { type: downloaded.mimeType })
+            formData.append('files', blob, downloaded.filename)
+
+            // 3. POST to image-to-video
+            const createResponse = await fetch(`${VIETAUTO_API_URL}/image-to-video`, {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${apiKey}` },
+                body: formData,
+            })
+
+            if (!createResponse.ok) {
+                const errorText = await createResponse.text()
+                throw new Error(`VietAuto Video API error ${createResponse.status}: ${errorText}`)
+            }
+
+            const createResult = await createResponse.json() as { video_id?: string }
+            const videoId = createResult.video_id
+
+            if (!videoId) {
+                throw new Error('VietAuto Video API returned no video_id')
+            }
+
+            logger.info(`Video task created: video_id=${videoId}, starting poll...`)
+
+            // 4. Poll until done
+            return await this.pollForVideoResult(apiKey, videoId)
+
+        } catch (error) {
+            const message = error instanceof Error ? error.message : String(error)
+            logger.error(`Video generation failed: ${message}`)
+            return { success: false, error: message }
+        }
+    }
+
+    /**
+     * Poll GET /veo/video?id={videoId} until the video is ready.
+     */
+    private async pollForVideoResult(
+        apiKey: string,
+        videoId: string,
+        maxWaitMs: number = 600_000,
+        intervalMs: number = 8_000,
+    ): Promise<GenerateResult> {
+        const startTime = Date.now()
+
+        while (Date.now() - startTime < maxWaitMs) {
+            try {
+                const pollResponse = await fetch(
+                    `${VIETAUTO_API_URL}/video?id=${encodeURIComponent(videoId)}`,
+                    { headers: { 'Authorization': `Bearer ${apiKey}` } },
+                )
+
+                if (pollResponse.ok) {
+                    const items = await pollResponse.json() as Array<{
+                        status: string
+                        file_url?: string
+                        message?: string
+                    }>
+
+                    if (Array.isArray(items) && items.length > 0) {
+                        const item = items[0]
+                        const status = (item.status || '').toUpperCase()
+
+                        if (status === 'SUCCESS') {
+                            if (item.file_url) {
+                                logger.info(`Video ready: ${item.file_url.substring(0, 80)}...`)
+                                return { success: true, videoUrl: item.file_url }
+                            }
+                            return { success: false, error: 'SUCCESS but no file_url returned' }
+                        }
+
+                        if (status === 'FAILED' || status === 'ERROR') {
+                            return {
+                                success: false,
+                                error: `VietAuto video generation failed: ${item.message || 'Unknown error'}`,
+                            }
+                        }
+
+                        const elapsed = Math.round((Date.now() - startTime) / 1000)
+                        if (elapsed % 16 === 0) {
+                            logger.info(`Video polling... status=${status}, elapsed=${elapsed}s`)
+                        }
+                    }
+                }
+            } catch (e) {
+                logger.warn(`Video poll error: ${e}`)
+            }
+
+            await new Promise(resolve => setTimeout(resolve, intervalMs))
+        }
+
+        return { success: false, error: `VietAuto video timeout after ${maxWaitMs / 1000}s` }
     }
 }
 

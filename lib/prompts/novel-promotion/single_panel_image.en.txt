@@ -21,7 +21,8 @@ Style requirement:
 
 Execution rules:
 1. Respect panel composition, character placement, and action logic.
-2. Use reference images for style/identity consistency only.
-3. Repaint the background according to shot type and angle.
-4. If storyboard conflicts with source text, keep narrative logic from source text.
-5. Keep final visual style consistent with provided references.
+2. Use reference images for style, identity, and outfit consistency.
+3. Characters MUST wear the exact same clothing/outfit as shown in their reference images. Do not change, add, or remove any clothing items.
+4. Repaint the background according to shot type and angle.
+5. If storyboard conflicts with source text, keep narrative logic from source text.
+6. Keep final visual style consistent with provided references.

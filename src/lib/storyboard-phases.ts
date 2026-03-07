@@ -177,8 +177,8 @@ export function getFilteredAppearanceList(characters: CharacterAsset[], clipChar
         .filter((c) => charNames.some(name => characterNameMatches(c.name, name)))
         .map((c) => {
             const appearances = c.appearances || []
-            if (appearances.length === 0) return `${c.name}: ["初始形象"]`
-            const appearanceNames = appearances.map((app) => app.changeReason || '初始形象')
+            if (appearances.length === 0) return `${c.name}: ["Default Appearance"]`
+            const appearanceNames = appearances.map((app) => app.changeReason || 'Default Appearance')
             return `${c.name}: [${appearanceNames.map((n: string) => `"${n}"`).join(', ')}]`
         }).join('\n') || '无'
 }
@@ -194,7 +194,7 @@ export function getFilteredFullDescription(characters: CharacterAsset[], clipCha
             if (appearances.length === 0) return `【${c.name}】无形象描述`
 
             return appearances.map((app) => {
-                const appearanceName = app.changeReason || '初始形象'
+                const appearanceName = app.changeReason || 'Default Appearance'
                 const descriptions = parseDescriptions(app.descriptions)
                 const selectedIndex = typeof app.selectedIndex === 'number' ? app.selectedIndex : 0
                 const finalDesc = descriptions[selectedIndex] || app.description || '无描述'

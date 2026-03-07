@@ -30,6 +30,7 @@ export interface StoryboardPanel {
   imageUrl?: string | null
   photographyRules?: string | null  // 单镜头摄影规则JSON
   actingNotes?: string | null       // 演技指导数据JSON
+  multiAngleImages?: string | null   // Multi-angle generated images JSON
   imageTaskRunning?: boolean  // 任务态运行状态（由 tasks 派生）
 }
 
@@ -136,6 +137,7 @@ export function useStoryboardState({
         imageUrl: p.imageUrl,
         photographyRules: p.photographyRules,
         actingNotes: p.actingNotes,
+        multiAngleImages: p.multiAngleImages || undefined,
         imageTaskRunning: p.imageTaskRunning || false
       }
     })

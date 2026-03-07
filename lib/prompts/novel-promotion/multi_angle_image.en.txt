@@ -1,0 +1,13 @@
+Recreate the EXACT same scene from the provided reference image, but from a completely different camera angle.
+
+**Target Camera Angle:** {{angle_name}} — {{angle_description}}
+**Aspect Ratio:** {{aspect_ratio}}
+**Art Style:** {{style}}
+
+## Constraints
+- Depict the EXACT SAME frozen moment in time as the reference image
+- Maintain the SAME character(s), wardrobe, poses, environment, lighting, mood, and color grade
+- Do NOT add or remove any characters, props, locations, or visual elements
+- The ONLY change is the camera viewpoint / angle / distance
+- Do NOT reuse or closely match the reference image's camera angle
+- Output a single cinematic frame — no text, labels, captions, borders, or UI elements

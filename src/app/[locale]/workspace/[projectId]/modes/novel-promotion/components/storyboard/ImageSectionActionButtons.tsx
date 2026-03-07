@@ -13,6 +13,7 @@ interface ImageSectionActionButtonsProps {
   onRegeneratePanelImage: (panelId: string, count?: number, force?: boolean) => void
   onOpenEditModal: () => void
   onOpenAIDataModal: () => void
+  onMultiAngle?: () => void
   onUndo?: (panelId: string) => void
   triggerPulse: () => void
 }
@@ -26,6 +27,7 @@ export default function ImageSectionActionButtons({
   onRegeneratePanelImage,
   onOpenEditModal,
   onOpenAIDataModal,
+  onMultiAngle,
   onUndo,
   triggerPulse,
 }: ImageSectionActionButtonsProps) {
@@ -75,6 +77,17 @@ export default function ImageSectionActionButtons({
                 className={`glass-btn-base glass-btn-secondary flex items-center gap-0.5 px-1.5 py-0.5 rounded-md text-[10px] transition-all active:scale-95 ${isSubmittingPanelImageTask || isModifying ? 'opacity-75' : ''}`}
               >
                 <span>{t('image.editImage')}</span>
+              </button>
+            )}
+            {imageUrl && onMultiAngle && (
+              <button
+                onClick={onMultiAngle}
+                disabled={isSubmittingPanelImageTask || isModifying}
+                className={`glass-btn-base glass-btn-secondary flex items-center gap-0.5 px-1.5 py-0.5 rounded-md text-[10px] transition-all active:scale-95 ${isSubmittingPanelImageTask || isModifying ? 'opacity-75' : ''}`}
+                title="Generate 9 camera angles"
+              >
+                <AppIcon name="film" className="w-2.5 h-2.5" />
+                <span>Multi-Angle</span>
               </button>
             )}
 

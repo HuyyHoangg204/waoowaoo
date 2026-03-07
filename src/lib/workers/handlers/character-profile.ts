@@ -138,7 +138,7 @@ async function handleConfirmProfile(
       data: {
         characterId: character.id,
         appearanceIndex: appIndex,
-        changeReason: readText(app.change_reason) || '初始形象',
+        changeReason: readText(app.change_reason) || 'Default Appearance',
         description: normalizedDescriptions[0] || '',
         descriptions: JSON.stringify(normalizedDescriptions),
         imageUrls: encodeImageUrls([]),

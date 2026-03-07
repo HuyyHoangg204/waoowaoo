@@ -135,6 +135,28 @@ export default function StoryboardGroup({
     [clearPanelTaskError, onRegeneratePanelImage],
   )
 
+  const handleMultiAngle = useCallback(
+    async (storyboardId: string, panelIndex: number) => {
+      // Find the panel to get its ID for the loading state
+      const panel = textPanels.find((p) => p.panelIndex === panelIndex)
+      if (!panel) return
+
+      try {
+        const resp = await fetch(`/api/novel-promotion/${projectId}/multi-angle`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ storyboardId, panelIndex }),
+        })
+        if (!resp.ok) {
+          console.error('Multi-angle request failed:', resp.status)
+        }
+      } catch (err) {
+        console.error('Multi-angle request error:', err)
+      }
+    },
+    [projectId, textPanels],
+  )
+
   return (
     <div className={`glass-surface-elevated p-6 relative ${failedError ? 'border-2 border-[var(--glass-stroke-danger)] bg-[var(--glass-danger-ring)]' : ''}`}>
       {failedError && (
@@ -201,6 +223,8 @@ export default function StoryboardGroup({
       )}
 
       <StoryboardPanelList
+        projectId={projectId}
+        episodeId={episodeId}
         storyboardId={storyboard.id}
         textPanels={textPanels}
         storyboardStartIndex={storyboardStartIndex}
@@ -232,6 +256,7 @@ export default function StoryboardGroup({
         onPreviewImage={onPreviewImage}
         onInsertAfter={handleOpenInsertModal}
         onVariant={handleOpenVariantModal}
+        onMultiAngle={handleMultiAngle}
         isInsertDisabled={(panelId) =>
           isSubmittingStoryboardTextTask ||
           insertingAfterPanelId === panelId ||

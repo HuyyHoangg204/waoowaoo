@@ -102,7 +102,7 @@ export const POST = apiHandler(async (request: NextRequest) => {
         data: {
             characterId: character.id,
             appearanceIndex: PRIMARY_APPEARANCE_INDEX,
-            changeReason: '初始形象',
+            changeReason: 'Default Appearance',
             description: descText,
             descriptions: JSON.stringify([descText]),
             imageUrl: initialImageUrl || null,

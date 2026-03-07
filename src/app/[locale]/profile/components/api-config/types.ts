@@ -107,6 +107,9 @@ export const PRESET_MODELS: PresetModel[] = [
     // VietAuto image models
     { modelId: 'NARWHAL', name: 'Narwhal', type: 'image', provider: 'vietauto' },
     { modelId: 'GEM_PIX_2', name: 'Gem Pix 2', type: 'image', provider: 'vietauto' },
+    // VietAuto video models
+    { modelId: 'VEO_3.1_FAST', name: 'Veo 3.1 Fast', type: 'video', provider: 'vietauto' },
+    { modelId: 'VEO_3.1_FAST_LOWER_PRIORITY', name: 'Veo 3.1 Fast (Lower Priority)', type: 'video', provider: 'vietauto' },
     // 视频模型
     { modelId: 'doubao-seedance-1-0-pro-fast-251015', name: 'Seedance 1.0 Pro Fast', type: 'video', provider: 'ark' },
     { modelId: 'doubao-seedance-1-0-lite-i2v-250428', name: 'Seedance 1.0 Lite', type: 'video', provider: 'ark' },

@@ -139,7 +139,7 @@ export const POST = apiHandler(async (
 
             if (videoKey) {
                 // 文件名使用描述，清理非法字符
-                const safeDesc = (panel.description || '镜头').slice(0, 50).replace(/[\\/:*?"<>|]/g, '_')
+                const safeDesc = (panel.description || 'shot').slice(0, 50).replace(/[\\/:*?"<>|]/g, '_')
 
                 videoCandidates.push({
                     fileName: '',

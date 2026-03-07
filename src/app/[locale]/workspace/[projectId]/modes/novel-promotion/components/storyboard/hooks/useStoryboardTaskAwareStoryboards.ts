@@ -56,7 +56,7 @@ function buildPanelTargets(storyboards: NovelPromotionStoryboard[], type: 'image
           key: `panel-image:${panel.id}`,
           targetType: 'NovelPromotionPanel',
           targetId: panel.id,
-          types: ['image_panel', 'panel_variant', 'modify_asset_image'],
+          types: ['image_panel', 'panel_variant', 'modify_asset_image', 'multi_angle'],
           resource: 'image',
           hasOutput: !!panel.imageUrl,
         })

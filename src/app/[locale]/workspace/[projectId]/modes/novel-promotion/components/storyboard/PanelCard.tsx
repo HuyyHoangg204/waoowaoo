@@ -47,6 +47,8 @@ interface PanelCardProps {
   onPreviewImage?: (url: string) => void  // 放大预览图片
   onInsertAfter?: () => void  // 在此镜头后插入
   onVariant?: () => void  // 生成镜头变体
+  onMultiAngle?: () => void  // Multi-angle image generation
+  imageTaskIntent?: string | null
   isInsertDisabled?: boolean  // 插入按钮是否禁用
 }
 
@@ -84,6 +86,8 @@ export default function PanelCard({
   onPreviewImage,
   onInsertAfter,
   onVariant,
+  onMultiAngle,
+  imageTaskIntent,
   isInsertDisabled
 }: PanelCardProps) {
   const t = useTranslations('storyboard')
@@ -128,6 +132,8 @@ export default function PanelCard({
           onClearError={onClearError}
           onUndo={onUndo}
           onPreviewImage={onPreviewImage}
+          onMultiAngle={onMultiAngle}
+          imageTaskIntent={imageTaskIntent}
         />
         {/* 插入分镜/镜头变体按钮 - 在图片区域右侧垂直居中 */}
         {(onInsertAfter || onVariant) && (

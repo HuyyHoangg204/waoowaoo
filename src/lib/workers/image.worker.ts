@@ -12,6 +12,7 @@ import {
   handlePanelImageTask,
   handlePanelVariantTask,
 } from './handlers/image-task-handlers'
+import { handleMultiAngleTask } from './handlers/multi-angle-task-handler'
 
 type AnyObj = Record<string, unknown>
 
@@ -40,6 +41,8 @@ async function processImageTask(job: Job<TaskJobData>) {
       return await handlePanelImageTask(job)
     case TASK_TYPE.PANEL_VARIANT:
       return await handlePanelVariantTask(job)
+    case TASK_TYPE.MULTI_ANGLE:
+      return await handleMultiAngleTask(job)
     default:
       throw new Error(`Unsupported image task type: ${job.data.type}`)
   }

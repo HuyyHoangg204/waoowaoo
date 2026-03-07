@@ -38,6 +38,7 @@ const TASK_TYPE_LABELS: Record<string, string> = {
   [TASK_TYPE.ASSET_HUB_AI_MODIFY_CHARACTER]: 'progress.taskType.assetHubAiModifyCharacter',
   [TASK_TYPE.ASSET_HUB_AI_MODIFY_LOCATION]: 'progress.taskType.assetHubAiModifyLocation',
   [TASK_TYPE.ASSET_HUB_REFERENCE_TO_CHARACTER]: 'progress.taskType.assetHubReferenceToCharacter',
+  [TASK_TYPE.MULTI_ANGLE]: 'progress.taskType.multiAngle',
 }
 
 const STAGE_LABELS: Record<string, string> = {
@@ -70,6 +71,9 @@ const STAGE_LABELS: Record<string, string> = {
   llm_proxy_submit: 'progress.stage.llmProxySubmit',
   llm_proxy_execute: 'progress.stage.llmProxyExecute',
   llm_proxy_persist: 'progress.stage.llmProxyPersist',
+  multi_angle_prepare: 'progress.stage.multiAnglePrepare',
+  multi_angle_batch_submit: 'progress.stage.multiAngleBatchSubmit',
+  multi_angle_upload: 'progress.stage.multiAngleUpload',
 }
 
 function asString(value: unknown): string | null {

@@ -35,6 +35,8 @@ interface ImageSectionProps {
   onClearError: () => void
   onUndo?: (panelId: string) => void
   onPreviewImage?: (url: string) => void
+  onMultiAngle?: () => void
+  imageTaskIntent?: string | null
 }
 
 export default function ImageSection({
@@ -58,6 +60,8 @@ export default function ImageSection({
   onClearError,
   onUndo,
   onPreviewImage,
+  onMultiAngle,
+  imageTaskIntent,
 }: ImageSectionProps) {
   const t = useTranslations('storyboard')
   const [isTaskPulseAnimating, setIsTaskPulseAnimating] = useState(false)
@@ -140,7 +144,10 @@ export default function ImageSection({
       ) : isModifying ? (
         renderLoadingState('modify', imageUrl)
       ) : isSubmittingPanelImageTask ? (
-        renderLoadingState('regenerate', imageUrl)
+        renderLoadingState(
+          imageTaskIntent === 'generate' ? 'generate' : 'regenerate',
+          imageUrl,
+        )
       ) : candidateData ? (
         hasValidCandidates ? (
           <ImageSectionCandidateMode
@@ -189,6 +196,7 @@ export default function ImageSection({
           onRegeneratePanelImage={onRegeneratePanelImage}
           onOpenEditModal={onOpenEditModal}
           onOpenAIDataModal={onOpenAIDataModal}
+          onMultiAngle={onMultiAngle}
           onUndo={onUndo}
           triggerPulse={triggerPulse}
         />

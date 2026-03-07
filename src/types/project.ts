@@ -182,6 +182,7 @@ export interface NovelPromotionPanel {
   previousImageMedia?: MediaRef | null
   photographyRules: string | null  // 单镜头摄影规则JSON
   actingNotes: string | null        // 演技指导数据JSON
+  multiAngleImages?: string | null   // Multi-angle generated images JSON
   // 任务态字段（由 tasks + hook 派生，不再依赖数据库持久化）
   imageTaskRunning?: boolean
   videoTaskRunning?: boolean

@@ -139,4 +139,8 @@ export const PROMPT_CATALOG: Record<PromptId, PromptCatalogEntry> = {
     pathStem: 'novel-promotion/voice_analysis',
     variableKeys: ['input', 'characters_lib_name', 'characters_introduction', 'storyboard_json'],
   },
+  [PROMPT_IDS.NP_MULTI_ANGLE_IMAGE]: {
+    pathStem: 'novel-promotion/multi_angle_image',
+    variableKeys: ['angle_name', 'angle_description', 'aspect_ratio', 'style'],
+  },
 }

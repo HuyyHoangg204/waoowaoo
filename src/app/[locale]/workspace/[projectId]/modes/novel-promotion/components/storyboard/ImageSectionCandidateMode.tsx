@@ -102,7 +102,7 @@ export default function ImageSectionCandidateMode({
               disabled={isConfirming}
               className="glass-btn-base glass-btn-secondary px-2 py-1 text-xs rounded disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              取消候选
+              Cancel
             </button>
             <button
               onClick={async () => {
