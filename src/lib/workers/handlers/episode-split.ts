@@ -74,7 +74,7 @@ export async function handleEpisodeSplitTask(job: Job<TaskJobData>) {
   const projectId = job.data.projectId
   const content = typeof payload.content === 'string' ? payload.content : ''
   if (!content || content.length < 100) {
-    throw new Error('文本太短，至少需要 100 字')
+    throw new Error('Text is too short, at least 100 characters required')
   }
 
   const project = await prisma.project.findUnique({
@@ -102,7 +102,7 @@ export async function handleEpisodeSplitTask(job: Job<TaskJobData>) {
   const userConfig = await getUserModelConfig(job.data.userId)
   const analysisModel = userConfig.analysisModel
   if (!analysisModel) {
-    throw new Error('请先在设置页面配置分析模型')
+    throw new Error('Please configure the analysis model in Settings first')
   }
 
   const promptBase = buildPrompt({
@@ -116,7 +116,7 @@ export async function handleEpisodeSplitTask(job: Job<TaskJobData>) {
 
   await reportTaskProgress(job, 20, {
     stage: 'episode_split_prepare',
-    stageLabel: '准备分集参数',
+    stageLabel: 'Preparing episode split parameters',
     displayMode: 'detail',
   })
   await assertTaskActive(job, 'episode_split_prepare')
@@ -174,12 +174,12 @@ export async function handleEpisodeSplitTask(job: Job<TaskJobData>) {
         const splitResult = parseSplitResponse(aiResponse)
         const splitEpisodes = splitResult.episodes || []
         if (splitEpisodes.length === 0) {
-          throw new Error('分集结果为空')
+          throw new Error('Episode split result is empty')
         }
 
         await reportTaskProgress(job, 80, {
           stage: 'episode_split_match',
-          stageLabel: '匹配剧集内容范围',
+          stageLabel: 'Matching episode content ranges',
           displayMode: 'detail',
         })
         const markerMatcher = createTextMarkerMatcher(content)
@@ -263,7 +263,7 @@ export async function handleEpisodeSplitTask(job: Job<TaskJobData>) {
 
   await reportTaskProgress(job, 96, {
     stage: 'episode_split_done',
-    stageLabel: '智能分集完成',
+    stageLabel: 'Episode split complete',
     displayMode: 'detail',
   })
 

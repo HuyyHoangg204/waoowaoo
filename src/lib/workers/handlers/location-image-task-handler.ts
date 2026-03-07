@@ -118,7 +118,7 @@ export async function handleLocationImageTask(job: Job<TaskJobData>) {
   for (let i = 0; i < locationImages.length; i++) {
     const item = locationImages[i]
     // 优先用映射表中的名字，回退到 item.location?.name，最后才用默认值
-    const name = locationNameMap[item.locationId] || item.location?.name || '场景'
+    const name = locationNameMap[item.locationId] || item.location?.name || 'Location'
     const promptBody = item.description || ''
     if (!promptBody) continue
 

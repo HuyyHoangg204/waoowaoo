@@ -135,7 +135,7 @@ async function failOrphanedTask(
             episodeId: task.episodeId,
             payload: {
                 stage: 'reconciled',
-                stageLabel: '任务已自动恢复',
+                stageLabel: 'Task auto-recovered',
                 message: errorMessage,
                 compensationFailed,
             },
@@ -244,7 +244,7 @@ export function startTaskWatchdog() {
                     episodeId: task.episodeId || null,
                     payload: {
                         stage: 'watchdog_timeout',
-                        stageLabel: '任务超时已终止',
+                        stageLabel: 'Task timed out and terminated',
                         message: task.errorMessage,
                         errorCode: task.errorCode,
                         compensationFailed: task.errorCode === 'BILLING_COMPENSATION_FAILED',

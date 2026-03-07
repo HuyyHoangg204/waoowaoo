@@ -365,7 +365,7 @@ export async function arkImageGeneration(
     }
 ): Promise<ArkImageGenerationResponse> {
     if (!options?.apiKey) {
-        throw new Error('请配置火山引擎 API Key')
+        throw new Error('Please configure the Volcengine API Key')
     }
 
     const {
@@ -425,7 +425,7 @@ export async function arkCreateVideoTask(
     }
 ): Promise<{ id: string; [key: string]: unknown }> {
     if (!options.apiKey) {
-        throw new Error('请配置火山引擎 API Key')
+        throw new Error('Please configure the Volcengine API Key')
     }
     validateArkVideoTaskRequest(request)
 
@@ -479,7 +479,7 @@ export async function arkQueryVideoTask(
     }
 ): Promise<ArkVideoTaskResponse> {
     if (!options.apiKey) {
-        throw new Error('请配置火山引擎 API Key')
+        throw new Error('Please configure the Volcengine API Key')
     }
 
     const {

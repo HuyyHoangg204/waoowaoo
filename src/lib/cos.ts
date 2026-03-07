@@ -145,7 +145,7 @@ if (!isLocalStorage) {
  */
 export function getCOSClient() {
   if (isLocalStorage) {
-    throw new Error('本地存储模式下不支持获取COS客户端')
+    throw new Error('COS client is not supported in local storage mode')
   }
   return cos!
 }

@@ -104,7 +104,7 @@ function extractArkUsage(data: unknown): { promptTokens: number; completionToken
 
 export async function arkResponsesCompletion(options: ArkResponsesOptions): Promise<ArkResponsesResult> {
     if (!options.apiKey) {
-        throw new Error('请配置火山引擎 API Key')
+        throw new Error('Please configure the Volcengine API Key')
     }
 
     const thinking = options.thinking

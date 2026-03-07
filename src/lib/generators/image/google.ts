@@ -163,7 +163,7 @@ export class GoogleGeminiImageGenerator extends BaseImageGenerator {
         // 检查失败原因
         const finishReason = candidate?.finishReason
         if (finishReason === 'IMAGE_SAFETY' || finishReason === 'SAFETY') {
-            throw new Error('内容因安全策略被过滤')
+            throw new Error('Content was filtered due to safety policy')
         }
 
         throw new Error('Gemini 未返回图片')
@@ -223,7 +223,7 @@ export class GoogleImagenGenerator extends BaseImageGenerator {
             const message = getErrorMessage(error)
             // 检查安全过滤
             if (message.includes('SAFETY') || message.includes('blocked')) {
-                throw new Error('内容因安全策略被过滤')
+                throw new Error('Content was filtered due to safety policy')
             }
             throw error
         }

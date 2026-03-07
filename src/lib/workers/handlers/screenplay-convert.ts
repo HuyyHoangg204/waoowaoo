@@ -78,13 +78,13 @@ export async function handleScreenplayConvertTask(job: Job<TaskJobData>) {
   }
 
   const screenplayPromptTemplate = getPromptTemplate(PROMPT_IDS.NP_SCREENPLAY_CONVERSION, job.data.locale)
-  const charactersLibName = novelData.characters.map((item) => item.name).join('、') || '无'
-  const locationsLibName = novelData.locations.map((item) => item.name).join('、') || '无'
+  const charactersLibName = novelData.characters.map((item) => item.name).join(', ') || 'None'
+  const locationsLibName = novelData.locations.map((item) => item.name).join(', ') || 'None'
   const charactersIntroduction = buildCharactersIntroduction(novelData.characters)
 
   await reportTaskProgress(job, 10, {
     stage: 'screenplay_convert_prepare',
-    stageLabel: '准备剧本转换参数',
+    stageLabel: 'Preparing screenplay conversion',
     displayMode: 'detail',
   })
   await assertTaskActive(job, 'screenplay_convert_prepare')
@@ -103,13 +103,13 @@ export async function handleScreenplayConvertTask(job: Job<TaskJobData>) {
     const clip = episode.clips[i]
     const stepIndex = i + 1
     const stepId = `screenplay_clip_${clip.id}`
-    const stepTitle = `片段剧本转换 ${stepIndex}/${total}`
+    const stepTitle = `Screenplay segment conversion ${stepIndex}/${total}`
     const progress = 15 + Math.min(70, Math.floor((stepIndex / Math.max(1, total)) * 70))
 
     await assertTaskActive(job, `screenplay_convert_step:${clip.id}`)
     await reportTaskProgress(job, progress, {
       stage: 'screenplay_convert_step',
-      stageLabel: '执行剧本转换',
+      stageLabel: 'Running screenplay conversion',
       displayMode: 'detail',
       message: stepTitle,
       stepId,
@@ -245,9 +245,9 @@ export async function handleScreenplayConvertTask(job: Job<TaskJobData>) {
 
   await reportTaskProgress(job, 96, {
     stage: 'screenplay_convert_done',
-    stageLabel: '剧本转换结果已保存',
+    stageLabel: 'Screenplay conversion results saved',
     displayMode: 'detail',
-    message: `完成 ${successCount}/${total} 个片段`,
+    message: `Completed ${successCount}/${total} segments`,
   })
 
   return {

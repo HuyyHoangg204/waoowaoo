@@ -21,7 +21,7 @@ import { logInfo as _ulogInfo, logError as _ulogError } from '@/lib/logging/core
  */
 export async function submitFalTask(endpoint: string, input: Record<string, unknown>, apiKey: string): Promise<string> {
     if (!apiKey) {
-        throw new Error('请配置 FAL API Key')
+        throw new Error('Please configure the FAL API Key')
     }
 
     const response = await fetch(`https://queue.fal.run/${endpoint}`, {
@@ -80,7 +80,7 @@ export async function queryFalStatus(endpoint: string, requestId: string, apiKey
     error?: string
 }> {
     if (!apiKey) {
-        throw new Error('请配置 FAL API Key')
+        throw new Error('Please configure the FAL API Key')
     }
 
     // 🔥 根据 FAL 官方客户端逻辑解析端点 ID
@@ -237,7 +237,7 @@ export async function queryArkVideoStatus(taskId: string, apiKey: string): Promi
     error?: string
 }> {
     if (!apiKey) {
-        throw new Error('请配置火山引擎 API Key')
+        throw new Error('Please configure the Volcengine API Key')
     }
 
     const response = await fetch(

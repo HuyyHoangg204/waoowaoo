@@ -191,14 +191,14 @@ export class GeminiCompatibleImageGenerator extends BaseImageGenerator {
             // 检查失败原因
             const finishReason = candidate?.finishReason
             if (finishReason === 'IMAGE_SAFETY' || finishReason === 'SAFETY') {
-                throw new Error('内容因安全策略被过滤')
+                throw new Error('Content was filtered due to safety policy')
             }
 
             // 🔥 检查是否返回了文本而非图片（常见的代理路由问题）
             const textParts = parts.filter((part) => typeof part?.text === 'string')
             if (textParts.length > 0) {
                 _ulogWarn(`[GeminiCompatible] 代理返回了文本而非图片: ${textParts[0].text?.substring(0, 100)}...`)
-                throw new Error('代理服务返回了文本而非图片，请检查模型配置')
+                throw new Error('Proxy returned text instead of an image, please check model configuration')
             }
 
             // 🔥 详细日志：打印完整响应结构
@@ -244,7 +244,7 @@ export class GeminiCompatibleImageGenerator extends BaseImageGenerator {
                 lowerMessage.includes('sensitive') || lowerMessage.includes('blocked') ||
                 lowerMessage.includes('policy_violation') || lowerMessage.includes('prohibited') ||
                 lowerMessage.includes('moderation') || lowerMessage.includes('harm')) {
-                throw new Error('图片内容可能涉及敏感信息，请修改描述后重试')
+                throw new Error('Content may contain sensitive information, please modify the description and try again')
             }
 
             // 2. 余额/配额不足
@@ -266,7 +266,7 @@ export class GeminiCompatibleImageGenerator extends BaseImageGenerator {
             // 5. 网络错误
             if (lowerMessage.includes('fetch failed') || lowerMessage.includes('econnreset') ||
                 lowerMessage.includes('enotfound') || lowerMessage.includes('network')) {
-                throw new Error('网络请求失败，请检查网络连接或稍后重试')
+                throw new Error('Network request failed, please check network connection or try again later')
             }
 
             // 6. Gemini 空响应（代理将其包装为 429，但实际是内容生成失败/被过滤）

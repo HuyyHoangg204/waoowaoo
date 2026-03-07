@@ -37,7 +37,7 @@ export async function handleAssetHubAIModifyTask(job: Job<TaskJobData>) {
   const payload = (job.data.payload || {}) as Record<string, unknown>
   const userConfig = await getUserModelConfig(job.data.userId)
   if (!userConfig.analysisModel) {
-    throw new Error('请先在用户配置中设置分析模型')
+    throw new Error('Please configure the analysis model in user settings first')
   }
 
   const isCharacter = job.data.type === TASK_TYPE.ASSET_HUB_AI_MODIFY_CHARACTER
@@ -72,7 +72,7 @@ export async function handleAssetHubAIModifyTask(job: Job<TaskJobData>) {
 
   await reportTaskProgress(job, 25, {
     stage: 'asset_hub_ai_modify_prepare',
-    stageLabel: '准备资产修改参数',
+    stageLabel: 'Preparing asset modification parameters',
     displayMode: 'detail',
   })
   await assertTaskActive(job, 'asset_hub_ai_modify_prepare')
@@ -105,7 +105,7 @@ export async function handleAssetHubAIModifyTask(job: Job<TaskJobData>) {
 
   await reportTaskProgress(job, 96, {
     stage: 'asset_hub_ai_modify_done',
-    stageLabel: '资产修改结果已生成',
+    stageLabel: 'Asset modification results generated',
     displayMode: 'detail',
     meta: {
       targetType: isCharacter ? 'character' : 'location',

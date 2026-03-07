@@ -41,7 +41,7 @@ export async function handleAssetHubAIDesignTask(job: Job<TaskJobData>) {
 
   await reportTaskProgress(job, 25, {
     stage: 'asset_hub_ai_design_prepare',
-    stageLabel: '准备资产设计参数',
+    stageLabel: 'Preparing asset design parameters',
     displayMode: 'detail',
   })
   await assertTaskActive(job, 'asset_hub_ai_design_prepare')
@@ -62,7 +62,7 @@ export async function handleAssetHubAIDesignTask(job: Job<TaskJobData>) {
 
   await reportTaskProgress(job, 96, {
     stage: 'asset_hub_ai_design_done',
-    stageLabel: '资产设计结果已生成',
+    stageLabel: 'Asset design results generated',
     displayMode: 'detail',
   })
 

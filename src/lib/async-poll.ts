@@ -172,7 +172,7 @@ export async function pollAsyncTask(
     userId: string
 ): Promise<PollResult> {
     if (!userId) {
-        throw new Error('缺少用户ID，无法获取 API Key')
+        throw new Error('Missing user ID, cannot retrieve API Key')
     }
 
     const parsed = parseExternalId(externalId)

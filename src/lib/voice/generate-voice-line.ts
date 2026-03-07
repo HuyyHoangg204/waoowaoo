@@ -170,7 +170,7 @@ export async function generateVoiceLine(params: {
   const speakerVoice = speakerVoices[line.speaker]
   const referenceAudioUrl = character?.customVoiceUrl || speakerVoice?.audioUrl
   if (!referenceAudioUrl) {
-    throw new Error('请先为该发言人设置参考音频')
+    throw new Error('Please set a reference audio for this speaker first')
   }
 
   const text = (line.content || '').trim()
@@ -188,7 +188,7 @@ export async function generateVoiceLine(params: {
     // 媒体路由格式：从数据库解析 storageKey → 再 getSignedUrl
     const storageKey = await resolveStorageKeyFromMediaValue(referenceAudioUrl)
     if (!storageKey) {
-      throw new Error(`无法解析参考音频路径: ${referenceAudioUrl}`)
+      throw new Error(`Cannot resolve reference audio path: ${referenceAudioUrl}`)
     }
     fullAudioUrl = getSignedUrl(storageKey, 3600)
   } else if (referenceAudioUrl.startsWith('/api/files/')) {

@@ -86,7 +86,7 @@ export async function handleAnalyzeNovelTask(job: Job<TaskJobData>) {
 
   let contentToAnalyze = readText(novelData.globalAssetText) || readText(firstEpisode?.novelText)
   if (!contentToAnalyze.trim()) {
-    throw new Error('请先填写全局资产设定或剧本内容')
+    throw new Error('Please fill in the global asset settings or script content first')
   }
 
   const maxContentLength = 30000
@@ -115,7 +115,7 @@ export async function handleAnalyzeNovelTask(job: Job<TaskJobData>) {
 
   await reportTaskProgress(job, 20, {
     stage: 'analyze_novel_prepare',
-    stageLabel: '准备资产分析参数',
+    stageLabel: 'Preparing asset analysis parameters',
     displayMode: 'detail',
   })
   await assertTaskActive(job, 'analyze_novel_prepare')
@@ -168,7 +168,7 @@ export async function handleAnalyzeNovelTask(job: Job<TaskJobData>) {
 
   await reportTaskProgress(job, 60, {
     stage: 'analyze_novel_characters_done',
-    stageLabel: '角色分析完成',
+    stageLabel: 'Character analysis complete',
     displayMode: 'detail',
     stepId: 'analyze_characters',
     stepTitle: '角色分析',
@@ -180,7 +180,7 @@ export async function handleAnalyzeNovelTask(job: Job<TaskJobData>) {
 
   await reportTaskProgress(job, 70, {
     stage: 'analyze_novel_locations_done',
-    stageLabel: '场景分析完成',
+    stageLabel: 'Location analysis complete',
     displayMode: 'detail',
     stepId: 'analyze_locations',
     stepTitle: '场景分析',
@@ -201,7 +201,7 @@ export async function handleAnalyzeNovelTask(job: Job<TaskJobData>) {
 
   await reportTaskProgress(job, 75, {
     stage: 'analyze_novel_persist',
-    stageLabel: '保存资产分析结果',
+    stageLabel: 'Saving asset analysis results',
     displayMode: 'detail',
   })
   await assertTaskActive(job, 'analyze_novel_persist')
@@ -297,7 +297,7 @@ export async function handleAnalyzeNovelTask(job: Job<TaskJobData>) {
 
   await reportTaskProgress(job, 96, {
     stage: 'analyze_novel_done',
-    stageLabel: '资产分析已完成',
+    stageLabel: 'Asset analysis complete',
     displayMode: 'detail',
   })
 

@@ -125,7 +125,7 @@ export async function handleClipsBuildTask(job: Job<TaskJobData>) {
 
   await reportTaskProgress(job, 20, {
     stage: 'clips_build_prepare',
-    stageLabel: '准备片段切分参数',
+    stageLabel: 'Preparing clip segmentation parameters',
     displayMode: 'detail',
   })
   await assertTaskActive(job, 'clips_build_prepare')
@@ -218,7 +218,7 @@ export async function handleClipsBuildTask(job: Job<TaskJobData>) {
 
   await reportTaskProgress(job, 75, {
     stage: 'clips_build_persist',
-    stageLabel: '保存片段切分结果',
+    stageLabel: 'Saving clip segmentation results',
     displayMode: 'detail',
   })
   await assertTaskActive(job, 'clips_build_persist')
@@ -248,7 +248,7 @@ export async function handleClipsBuildTask(job: Job<TaskJobData>) {
 
   await reportTaskProgress(job, 96, {
     stage: 'clips_build_done',
-    stageLabel: '片段切分已完成',
+    stageLabel: 'Clip segmentation complete',
     displayMode: 'detail',
   })
 

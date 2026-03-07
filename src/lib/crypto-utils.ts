@@ -84,12 +84,12 @@ export function encryptApiKey(plaintext: string): string {
  */
 export function decryptApiKey(ciphertext: string): string {
     if (!ciphertext || ciphertext.trim() === '') {
-        throw new Error('加密数据不能为空')
+        throw new Error('Encrypted data cannot be empty')
     }
 
     const parts = ciphertext.split(':')
     if (parts.length !== 3) {
-        throw new Error('加密数据格式错误')
+        throw new Error('Encrypted data format error')
     }
 
     const [ivHex, authTagHex, encryptedHex] = parts

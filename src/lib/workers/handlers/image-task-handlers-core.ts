@@ -85,7 +85,7 @@ export async function handleModifyAssetImageTask(job: Job<TaskJobData>) {
     const normalizedExtras = await normalizeReferenceImagesForGeneration(extraReferenceInputs)
     const referenceImages = Array.from(new Set([requiredReference, ...normalizedExtras]))
 
-    const prompt = `请根据以下指令修改图片，保持人物核心特征一致：\n${modifyPrompt}`
+    const prompt = `Please modify this image according to the following instruction, maintaining core character features:\n${modifyPrompt}`
     const source = await resolveImageSourceFromGeneration(job, {
       userId: job.data.userId,
       modelId: editModel,
@@ -97,7 +97,7 @@ export async function handleModifyAssetImageTask(job: Job<TaskJobData>) {
       },
     })
 
-    const label = `${appearance.character?.name || '角色'} - ${appearance.changeReason || '形象'}`
+    const label = `${appearance.character?.name || 'Character'} - ${appearance.changeReason || 'Appearance'}`
     const labeled = await withLabelBar(source, label)
     const cosKey = await uploadImageSourceToCos(labeled, 'character-modify', appearance.id)
 

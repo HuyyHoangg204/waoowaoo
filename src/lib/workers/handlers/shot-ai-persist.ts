@@ -30,7 +30,7 @@ export async function resolveAnalysisModel(projectId: string, userId: string): P
   const analysisModel =
     normalizeModelKey(novelData.analysisModel) ??
     normalizeModelKey(userPreference?.analysisModel)
-  if (!analysisModel) throw new Error('请先在项目设置中配置分析模型')
+  if (!analysisModel) throw new Error('Please configure the analysis model in project settings first')
 
   return { id: novelData.id, analysisModel }
 }

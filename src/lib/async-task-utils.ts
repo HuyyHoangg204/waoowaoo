@@ -46,7 +46,7 @@ interface GeminiBatchClient {
  */
 export async function queryBananaTaskStatus(requestId: string, apiKey: string): Promise<TaskStatus> {
     if (!apiKey) {
-        throw new Error('请配置 FAL API Key')
+        throw new Error('Please configure the FAL API Key')
     }
 
     try {
@@ -104,7 +104,7 @@ export async function queryBananaTaskStatus(requestId: string, apiKey: string): 
  */
 export async function queryGeminiBatchStatus(batchName: string, apiKey: string): Promise<TaskStatus> {
     if (!apiKey) {
-        throw new Error('请配置 Google AI API Key')
+        throw new Error('Please configure the Google AI API Key')
     }
 
     try {
@@ -173,7 +173,7 @@ export async function queryGeminiBatchStatus(batchName: string, apiKey: string):
  */
 export async function queryGoogleVideoStatus(operationName: string, apiKey: string): Promise<TaskStatus> {
     if (!apiKey) {
-        throw new Error('请配置 Google AI API Key')
+        throw new Error('Please configure the Google AI API Key')
     }
 
     const logPrefix = '[Veo Query]'
@@ -282,7 +282,7 @@ export async function queryGoogleVideoStatus(operationName: string, apiKey: stri
  */
 export async function querySeedanceVideoStatus(taskId: string, apiKey: string): Promise<TaskStatus> {
     if (!apiKey) {
-        throw new Error('请配置火山引擎 API Key')
+        throw new Error('Please configure the Volcengine API Key')
     }
 
     try {

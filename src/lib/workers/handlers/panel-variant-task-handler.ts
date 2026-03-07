@@ -69,12 +69,12 @@ function buildCharactersInfo(
   projectData: { characters?: Array<{ name: string; introduction?: string | null; appearances?: Array<{ changeReason?: string | null }> }> },
 ): string {
   const panelCharacters = parsePanelCharacterReferences(panel.characters)
-  if (panelCharacters.length === 0) return '无角色'
+  if (panelCharacters.length === 0) return 'No characters'
 
   return panelCharacters.map(item => {
     const character = findCharacterByName(projectData.characters || [], item.name)
     const intro = character?.introduction || ''
-    const appearance = item.appearance || '默认形象'
+    const appearance = item.appearance || 'Default appearance'
     return `- ${item.name}（${appearance}）${intro ? `：${intro}` : ''}`
   }).join('\n')
 }
@@ -84,13 +84,13 @@ function buildCharacterAssetsDescription(
   projectData: { characters?: Array<{ name: string; appearances?: Array<{ changeReason?: string | null; imageUrl?: string | null }> }> },
 ): string {
   const panelCharacters = parsePanelCharacterReferences(panel.characters)
-  if (panelCharacters.length === 0) return '无角色参考图'
+  if (panelCharacters.length === 0) return 'No character references'
 
   return panelCharacters.map(item => {
     const character = findCharacterByName(projectData.characters || [], item.name)
-    if (!character) return `- ${item.name}：无参考图`
+    if (!character) return `- ${item.name}: No reference image`
     const hasAppearance = (character.appearances || []).length > 0
-    return `- ${item.name}：${hasAppearance ? '已提供参考图' : '无参考图'}`
+    return `- ${item.name}: ${hasAppearance ? 'Reference provided' : 'No reference image'}`
   }).join('\n')
 }
 
@@ -151,15 +151,15 @@ export async function handlePanelVariantTask(job: Job<TaskJobData>) {
     originalCameraMove: sourcePanel.cameraMove || '',
     location: locationName,
     charactersInfo,
-    variantTitle: pickFirstString(variant.title) || '镜头变体',
+    variantTitle: pickFirstString(variant.title) || 'Shot variant',
     variantDescription: variant.description || '',
     targetShotType: variant.shot_type || sourcePanel.shotType || '',
     targetCameraMove: variant.camera_move || sourcePanel.cameraMove || '',
     videoPrompt: pickFirstString(variant.video_prompt, variant.description) || '',
     characterAssets: characterAssetsDesc,
-    locationAsset: locationName ? `场景：${locationName}` : '无场景参考',
+    locationAsset: locationName ? `Location: ${locationName}` : 'No location reference',
     aspectRatio,
-    style: artStyle || '与参考图风格一致',
+    style: artStyle || 'Match the reference image style',
   })
 
   _ulogInfo('[panel-variant] resolved variant prompt', prompt)

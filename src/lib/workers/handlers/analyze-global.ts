@@ -69,7 +69,7 @@ export async function handleAnalyzeGlobalTask(job: Job<TaskJobData>) {
     allContent += `【${ep.name}】\n${text}\n\n`
   }
   if (!allContent.trim()) {
-    throw new Error('没有可分析的内容，请先添加剧集或全局设定')
+    throw new Error('No content to analyze, please add episodes or global settings first')
   }
 
   const chunks = chunkContent(allContent, CHUNK_SIZE)
@@ -90,7 +90,7 @@ export async function handleAnalyzeGlobalTask(job: Job<TaskJobData>) {
 
   await reportTaskProgress(job, 10, {
     stage: 'analyze_global_prepare',
-    stageLabel: '准备全局资产分析参数',
+    stageLabel: 'Preparing global asset analysis parameters',
     displayMode: 'detail',
     message: `共 ${chunks.length} 个切片`,
   })
@@ -106,7 +106,7 @@ export async function handleAnalyzeGlobalTask(job: Job<TaskJobData>) {
       const progress = 15 + Math.min(60, Math.floor(((i + 1) / Math.max(1, chunks.length)) * 60))
       await reportTaskProgress(job, progress, {
         stage: 'analyze_global_chunk',
-        stageLabel: '分析全局资产切片',
+        stageLabel: 'Analyzing global asset slice',
         displayMode: 'detail',
         message: `切片 ${i + 1}/${chunks.length}`,
         stepId: `analyze_global_chunk_${i + 1}`,
@@ -181,7 +181,7 @@ export async function handleAnalyzeGlobalTask(job: Job<TaskJobData>) {
 
   await reportTaskProgress(job, 96, {
     stage: 'analyze_global_done',
-    stageLabel: '全局资产分析完成',
+    stageLabel: 'Global asset analysis complete',
     displayMode: 'detail',
   })
 
