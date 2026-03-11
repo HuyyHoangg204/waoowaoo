@@ -6019,5 +6019,41 @@
       "mode": "flat",
       "flatAmount": 0.5
     }
+  },
+  {
+    "apiType": "image",
+    "provider": "vietauto",
+    "modelId": "gempix-2",
+    "pricing": {
+      "mode": "flat",
+      "flatAmount": 0.1
+    }
+  },
+  {
+    "apiType": "video",
+    "provider": "vietauto",
+    "modelId": "veo-3.1-fast",
+    "pricing": {
+      "mode": "flat",
+      "flatAmount": 5
+    }
+  },
+  {
+    "apiType": "video",
+    "provider": "vietauto",
+    "modelId": "veo-3.1-fast-lower-priority",
+    "pricing": {
+      "mode": "flat",
+      "flatAmount": 5
+    }
+  },
+  {
+    "apiType": "image",
+    "provider": "vietauto",
+    "modelId": "narwhal",
+    "pricing": {
+      "mode": "flat",
+      "flatAmount": 0.1
+    }
   }
 ]

@@ -17,6 +17,8 @@ export function ProviderBaseFields({ provider, t, state }: ProviderBaseFieldsPro
         return 'https://your-api-domain.com'
       case 'openai-compatible':
         return 'https://api.openai.com/v1'
+      case 'vietauto':
+        return 'Enter your Project ID'
       default:
         return 'http://localhost:8000'
     }
@@ -222,7 +224,7 @@ export function ProviderBaseFields({ provider, t, state }: ProviderBaseFieldsPro
         <div className="px-3.5 pb-2.5 pt-2">
           <div className="glass-surface-soft flex items-center gap-2.5 rounded-xl px-3 py-2">
             <span className="w-[64px] shrink-0 whitespace-nowrap text-[12px] font-semibold text-[var(--glass-text-tertiary)]">
-              {t('baseUrl')}
+              {state.providerKey === 'vietauto' ? 'Project ID' : t('baseUrl')}
             </span>
             {state.isEditingUrl ? (
               <div className="flex flex-1 items-center gap-2">
@@ -272,7 +274,7 @@ export function ProviderBaseFields({ provider, t, state }: ProviderBaseFieldsPro
                     className="glass-btn-base glass-btn-tone-info h-7 px-2.5 text-[12px] font-semibold"
                   >
                     <AppIcon name="plus" className="h-3.5 w-3.5" />
-                    <span>{t('configureBaseUrl')}</span>
+                    <span>{state.providerKey === 'vietauto' ? 'Set Project ID' : t('configureBaseUrl')}</span>
                   </button>
                 )}
               </div>

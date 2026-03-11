@@ -175,13 +175,13 @@ export const POST = apiHandler(async (
     }
   })
 
-  // 创建初始形象（独立表）
-  const descText = description || `${name} 的角色设定`
+  // Create default appearance (standalone table)
+  const descText = description || `Character design for ${name}`
   const appearance = await prisma.characterAppearance.create({
     data: {
       characterId: character.id,
       appearanceIndex: PRIMARY_APPEARANCE_INDEX,
-      changeReason: '初始形象',
+      changeReason: 'Default Appearance',
       description: descText,
       descriptions: JSON.stringify([descText]),
       imageUrls: encodeImageUrls([]),

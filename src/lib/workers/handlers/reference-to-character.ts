@@ -136,7 +136,7 @@ export async function handleReferenceToCharacterTask(job: Job<TaskJobData>) {
   const characterId = readString(payload.characterId)
   const extractOnly = readBoolean(payload.extractOnly)
   const customDescription = readString(payload.customDescription)
-  const characterName = readString(payload.characterName) || '新角色 - 初始形象'
+  const characterName = readString(payload.characterName) || 'New Character - Default Appearance'
   const artStyle = readString(payload.artStyle)
 
   if (isBackgroundJob && (!characterId || !appearanceId)) {
@@ -203,7 +203,13 @@ export async function handleReferenceToCharacterTask(job: Job<TaskJobData>) {
   }
 
   const useReferenceImages = !customDescription
-  const { apiKey: falApiKey } = await getProviderConfig(job.data.userId, 'fal')
+  let falApiKey: string | null = null
+  try {
+    const config = await getProviderConfig(job.data.userId, 'fal')
+    falApiKey = config.apiKey || null
+  } catch (error) {
+    // Ignore missing FAL key, users may use other models (like VietAuto)
+  }
   const keyPrefix = isAssetHub ? 'ref-char' : `proj-ref-char-${job.data.projectId}`
   const count = normalizeImageGenerationCount('reference-to-character', payload.count)
 

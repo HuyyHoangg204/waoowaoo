@@ -42,8 +42,8 @@ export type LLMStageStreamCardProps = {
 }
 
 const PROGRESS_KEY_PREFIX = 'progress.'
-const REASONING_HEADER = '【思考过程】'
-const FINAL_HEADER = '【最终结果】'
+const REASONING_HEADER = '【Reasoning】'
+const FINAL_HEADER = '【Final Result】'
 
 function statusClass(status: LLMStageViewStatus): string {
   if (status === 'completed') return 'glass-chip glass-chip-success'
@@ -451,7 +451,7 @@ export default function LLMStageStreamCard({
                           }}
                           className="glass-btn-base glass-btn-primary rounded-md px-2.5 py-1 text-[11px]"
                         >
-                          重试
+                          Retry
                         </button>
                       </div>
                     )}

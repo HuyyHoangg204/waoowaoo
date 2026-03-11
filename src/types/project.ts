@@ -39,7 +39,7 @@ export interface CharacterAppearance {
   id: string
   characterId?: string            // 可选，API 响应可能不包含
   appearanceIndex: number           // 形象序号：0, 1, 2...（0 = 主形象）
-  changeReason: string              // "初始形象"、"落水湿身"
+  changeReason: string              // "Default Appearance", "Wet from falling into water"
   description: string | null
   descriptions: string[] | null     // 3个描述变体
   imageUrl: string | null           // 选中的图片

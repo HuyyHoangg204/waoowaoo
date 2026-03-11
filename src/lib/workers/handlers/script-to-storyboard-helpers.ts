@@ -51,9 +51,7 @@ function parsePanelCharacters(raw: string | null): string[] {
 
 export function parseVoiceLinesJson(responseText: string): JsonRecord[] {
   const rows = safeParseJsonArray(responseText)
-  if (rows.length === 0) {
-    throw new Error('voice_analyze: invalid payload')
-  }
+  // Empty array is valid — not every segment has spoken dialogue
   return rows as JsonRecord[]
 }
 
@@ -121,8 +119,8 @@ export async function persistStoryboardsAndPanels(params: {
             storyboardId: storyboard.id,
             panelIndex: i,
             panelNumber: panel.panel_number || i + 1,
-            shotType: panel.shot_type || '中景',
-            cameraMove: panel.camera_move || '固定',
+            shotType: panel.shot_type || 'Medium Shot',
+            cameraMove: panel.camera_move || 'Static',
             description: panel.description || null,
             videoPrompt: panel.video_prompt || null,
             location: panel.location || null,

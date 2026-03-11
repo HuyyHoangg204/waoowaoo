@@ -78,8 +78,8 @@ export async function handleAnalyzeShotVariantsTask(job: Job<TaskJobData>, paylo
     locale: job.data.locale,
     variables: {
       panel_description: panel.description || '无',
-      shot_type: panel.shotType || '中景',
-      camera_move: panel.cameraMove || '固定',
+      shot_type: panel.shotType || 'Medium Shot',
+      camera_move: panel.cameraMove || 'Static',
       location: panel.location || '未知',
       characters_info: charactersInfo,
     },

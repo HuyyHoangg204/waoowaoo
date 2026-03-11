@@ -8,8 +8,8 @@ describe('panel ai data sync helpers', () => {
   it('removes deleted character from acting notes and photography rules', () => {
     const synced = syncPanelCharacterDependentJson({
       characters: [
-        { name: '楚江锴/当朝皇帝', appearance: '初始形象' },
-        { name: '燕画乔/魏画乔', appearance: '初始形象' },
+        { name: '楚江锴/当朝皇帝', appearance: 'Default Appearance' },
+        { name: '燕画乔/魏画乔', appearance: 'Default Appearance' },
       ],
       removeIndex: 0,
       actingNotesJson: JSON.stringify([
@@ -28,7 +28,7 @@ describe('panel ai data sync helpers', () => {
       }),
     })
 
-    expect(synced.characters).toEqual([{ name: '燕画乔/魏画乔', appearance: '初始形象' }])
+    expect(synced.characters).toEqual([{ name: '燕画乔/魏画乔', appearance: 'Default Appearance' }])
     expect(JSON.parse(synced.actingNotesJson || 'null')).toEqual([
       { name: '燕画乔/魏画乔', acting: '本能后退' },
     ])
@@ -78,7 +78,7 @@ describe('panel ai data sync helpers', () => {
 
   it('throws on malformed acting notes to avoid silent fallback', () => {
     expect(() => syncPanelCharacterDependentJson({
-      characters: [{ name: '甲', appearance: '初始形象' }],
+      characters: [{ name: '甲', appearance: 'Default Appearance' }],
       removeIndex: 0,
       actingNotesJson: '[{"name":"甲","acting":"动作"}, {"acting":"缺少名字"}]',
       photographyRulesJson: null,

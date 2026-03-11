@@ -91,9 +91,9 @@ export const POST = apiHandler(async (
         storyboardId: newStoryboard.id,
         panelIndex: 0,
         panelNumber: 1,
-        shotType: '中景',
-        cameraMove: '固定',
-        description: '新镜头描述',
+        shotType: 'Medium Shot',
+        cameraMove: 'Static',
+        description: 'New shot description',
         characters: '[]'
       }
     })
