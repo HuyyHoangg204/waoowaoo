@@ -21,7 +21,7 @@ Style requirement:
 
 Execution rules:
 1. Respect panel composition, character placement, and action logic.
-2. Use reference images for style/identity consistency only.
+2. Use reference images ONLY for character identity (facial features, hairstyle, hair color, outfit, body proportions) — NOT for determining rendering style.
 3. Repaint the background according to shot type and angle.
 4. If storyboard conflicts with source text, keep narrative logic from source text.
-5. Keep final visual style consistent with provided references.
+5. The rendering style (line art, coloring, lighting, texture) MUST follow the Style requirement above. Even if reference images are in a different art style (e.g. 2D, comic, realistic), the final output MUST be rendered in the specified style. Style requirement takes priority over reference image aesthetics.

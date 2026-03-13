@@ -211,6 +211,7 @@ export async function handleAnalyzeNovelTask(job: Job<TaskJobData>) {
     if (existsInLibrary) continue
 
     const profileData = {
+      entity_type: item.entity_type || 'human',
       role_level: item.role_level,
       archetype: item.archetype,
       personality_tags: toStringArray(item.personality_tags),

@@ -77,7 +77,7 @@ describe('run stream state-machine', () => {
       },
     })
 
-    expect(output).toContain('【错误】')
+    expect(output).toContain('【Error】')
     expect(output).toContain('fetch failed sending request')
   })
 

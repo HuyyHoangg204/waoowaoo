@@ -30,7 +30,8 @@ Style requirement:
 {style}
 
 Execution rules:
-1. Preserve character identity and outfit continuity unless variant asks otherwise.
-2. Preserve location continuity.
+1. Use reference images ONLY for character identity (facial features, hairstyle, outfit, body proportions) — NOT for determining rendering style.
+2. Preserve location continuity (layout, spatial arrangement).
 3. Change framing/angle/composition according to target shot and camera move.
-4. Keep one-frame output only, no text overlays.
+4. The rendering style (line art, coloring, lighting, texture) MUST follow the Style requirement above. Even if reference images are in a different art style, the final output MUST be rendered in the specified style.
+5. Keep one-frame output only, no text overlays.
